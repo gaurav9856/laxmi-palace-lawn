@@ -1,0 +1,215 @@
+<header class="admin-top">
+  <div class="brand">
+    <span class="mark">L</span>
+    <div>
+      <strong>Laxmi Palace</strong>
+      <small>Admin Dashboard</small>
+    </div>
+  </div>
+  <div class="actions">
+    <span class="user" *ngIf="user()">
+      <mat-icon>account_circle</mat-icon> {{ user()?.name }}
+    </span>
+    <a routerLink="/" mat-stroked-button><mat-icon>language</mat-icon> Public Site</a>
+    <button mat-stroked-button color="warn" (click)="logout()"><mat-icon>logout</mat-icon> Logout</button>
+  </div>
+</header>
+
+<main class="admin-main">
+  <!-- STATS -->
+  <section class="stats-grid">
+    <div class="stat-card primary">
+      <div class="num">{{ stats().total }}</div>
+      <div class="label">Total Bookings</div>
+      <mat-icon>event_note</mat-icon>
+    </div>
+    <div class="stat-card ok">
+      <div class="num">{{ stats().upcoming }}</div>
+      <div class="label">Upcoming Events</div>
+      <mat-icon>schedule</mat-icon>
+    </div>
+    <div class="stat-card warn">
+      <div class="num">{{ stats().pending }}</div>
+      <div class="label">Pending Requests</div>
+      <mat-icon>pending_actions</mat-icon>
+    </div>
+    <div class="stat-card info">
+      <div class="num">{{ availableDateCount() }}</div>
+      <div class="label">Available Dates (1 yr)</div>
+      <mat-icon>event_available</mat-icon>
+    </div>
+    <div class="stat-card gold">
+      <div class="num">₹{{ stats().monthlyRevenue | number:'1.0-0' }}</div>
+      <div class="label">Monthly Revenue</div>
+      <mat-icon>currency_rupee</mat-icon>
+    </div>
+  </section>
+
+  <mat-tab-group dynamicHeight>
+    <!-- ============== BOOKINGS TAB ============== -->
+    <mat-tab label="Bookings">
+      <div class="tab-content">
+        <!-- Filters -->
+        <div class="filters card">
+          <mat-form-field appearance="outline">
+            <mat-label>Search</mat-label>
+            <input matInput [ngModel]="search()" (ngModelChange)="search.set($event)"
+                   placeholder="Name, phone, email, type">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select [ngModel]="filterStatus()" (ngModelChange)="filterStatus.set($event); loadBookings()">
+              <mat-option value="">All</mat-option>
+              <mat-option value="PENDING">Pending</mat-option>
+              <mat-option value="APPROVED">Approved</mat-option>
+              <mat-option value="REJECTED">Rejected</mat-option>
+              <mat-option value="CANCELLED">Cancelled</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>From</mat-label>
+            <input matInput type="date" [ngModel]="filterFrom()" (ngModelChange)="filterFrom.set($event); loadBookings()">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>To</mat-label>
+            <input matInput type="date" [ngModel]="filterTo()" (ngModelChange)="filterTo.set($event); loadBookings()">
+          </mat-form-field>
+
+          <button mat-stroked-button (click)="clearFilters()">
+            <mat-icon>clear</mat-icon> Clear
+          </button>
+        </div>
+
+        <!-- Table -->
+        <div class="card table-wrap">
+          <div *ngIf="loading()" class="loading">
+            <mat-spinner diameter="32"></mat-spinner> Loading bookings…
+          </div>
+
+          <table mat-table [dataSource]="filtered()" *ngIf="!loading()">
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>#</th>
+              <td mat-cell *matCellDef="let b">{{ b.id }}</td>
+            </ng-container>
+            <ng-container matColumnDef="event_date">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let b">{{ b.event_date | date: 'mediumDate' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="customer_name">
+              <th mat-header-cell *matHeaderCellDef>Customer</th>
+              <td mat-cell *matCellDef="let b">
+                <strong>{{ b.customer_name }}</strong>
+                <br><small>{{ b.customer_email || '—' }}</small>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="customer_mobile">
+              <th mat-header-cell *matHeaderCellDef>Mobile</th>
+              <td mat-cell *matCellDef="let b">
+                <a href="tel:{{b.customer_mobile}}">{{ b.customer_mobile }}</a>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="event_type">
+              <th mat-header-cell *matHeaderCellDef>Type</th>
+              <td mat-cell *matCellDef="let b">{{ b.event_type }}</td>
+            </ng-container>
+            <ng-container matColumnDef="guest_count">
+              <th mat-header-cell *matHeaderCellDef>Guests</th>
+              <td mat-cell *matCellDef="let b">{{ b.guest_count }}</td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let b">
+                <span class="chip" [class]="statusColor(b.status)">{{ b.status }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let b">
+                <button mat-icon-button color="primary"
+                        *ngIf="b.status === 'PENDING'"
+                        (click)="approve(b)" matTooltip="Approve">
+                  <mat-icon>check_circle</mat-icon>
+                </button>
+                <button mat-icon-button color="warn"
+                        *ngIf="b.status === 'PENDING'"
+                        (click)="reject(b)" matTooltip="Reject">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+                <button mat-icon-button
+                        *ngIf="b.status === 'APPROVED'"
+                        (click)="cancel(b)" matTooltip="Cancel">
+                  <mat-icon>event_busy</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+
+          <div class="empty" *ngIf="!loading() && filtered().length === 0">
+            <mat-icon>inbox</mat-icon>
+            <p>No bookings found.</p>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ============== BLOCKED DATES TAB ============== -->
+    <mat-tab label="Blocked Dates">
+      <div class="tab-content">
+        <div class="card block-form">
+          <h3>Block a Date</h3>
+          <p>Use this to mark a date as unavailable for booking (e.g. maintenance, festivals).</p>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="picker" [ngModel]="blockDate()" (ngModelChange)="blockDate.set($event)">
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="grow">
+              <mat-label>Reason (optional)</mat-label>
+              <input matInput [ngModel]="blockReason()" (ngModelChange)="blockReason.set($event)">
+            </mat-form-field>
+            <button mat-raised-button color="warn" (click)="block()" [disabled]="!blockDate()">
+              <mat-icon>block</mat-icon> Block Date
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Currently Blocked</h3>
+          <table mat-table [dataSource]="blockedDates()" class="full-table">
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let b">{{ b.blocked_date | date: 'mediumDate' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="reason">
+              <th mat-header-cell *matHeaderCellDef>Reason</th>
+              <td mat-cell *matCellDef="let b">{{ b.reason || '—' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let b">
+                <button mat-icon-button color="warn" (click)="unblock(b)" matTooltip="Unblock">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['date','reason','actions']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['date','reason','actions'];"></tr>
+          </table>
+          <div class="empty" *ngIf="blockedDates().length === 0">
+            <mat-icon>event</mat-icon>
+            <p>No blocked dates.</p>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</main>

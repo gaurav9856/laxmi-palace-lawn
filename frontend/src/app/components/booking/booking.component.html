@@ -1,0 +1,110 @@
+<section class="page-hero">
+  <div class="container">
+    <small class="eyebrow">Reserve Your Date</small>
+    <h1>Book Laxmi Palace Lawn</h1>
+    <p class="lead">Pick a date on the calendar and fill in your details. Our team will confirm your booking shortly.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+
+    <div class="booking-grid">
+      <!-- Calendar -->
+      <div class="card calendar-card">
+        <h2><mat-icon style="vertical-align:middle;color:var(--color-gold)">event</mat-icon> Choose Your Date</h2>
+
+        <div class="legend">
+          <span><i class="dot green"></i> Available</span>
+          <span><i class="dot red"></i> Already Booked</span>
+          <span><i class="dot gray"></i> Blocked / Closed</span>
+        </div>
+
+        <div *ngIf="loadingCal()" class="loading"><mat-spinner diameter="32"></mat-spinner> Loading calendar…</div>
+
+        <mat-calendar
+          *ngIf="!loadingCal()"
+          [minDate]="minDate"
+          [dateClass]="dateClass"
+          [dateFilter]="dateFilter"
+          (selectedChange)="onDateSelected($event)">
+        </mat-calendar>
+
+        <div class="selected-info" *ngIf="selectedDate()">
+          <strong>Selected:</strong> {{ selectedDate() | date: 'fullDate' }}
+          <div *ngIf="availability().checked">
+            <p *ngIf="availability().available" class="msg ok">
+              <mat-icon>check_circle</mat-icon> {{ availability().message }}
+            </p>
+            <p *ngIf="!availability().available" class="msg err">
+              <mat-icon>cancel</mat-icon> ❌ {{ availability().message }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="card form-card">
+        <h2><mat-icon style="vertical-align:middle;color:var(--color-gold)">edit_note</mat-icon> Your Details</h2>
+
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="name" autocomplete="name" required>
+            <mat-error *ngIf="form.controls.name.invalid">Please enter your full name</mat-error>
+          </mat-form-field>
+
+          <div class="row">
+            <mat-form-field appearance="outline">
+              <mat-label>Mobile Number</mat-label>
+              <input matInput formControlName="mobile" inputmode="tel" maxlength="10" required>
+              <mat-error *ngIf="form.controls.mobile.invalid">Enter a valid 10-digit mobile</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Email (optional)</mat-label>
+              <input matInput formControlName="email" type="email" autocomplete="email">
+              <mat-error *ngIf="form.controls.email.invalid">Enter a valid email</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="row">
+            <mat-form-field appearance="outline">
+              <mat-label>Event Type</mat-label>
+              <mat-select formControlName="eventType" required>
+                <mat-option *ngFor="let t of eventTypes" [value]="t">{{ t }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.controls.eventType.invalid">Please select an event type</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Number of Guests</mat-label>
+              <input matInput formControlName="guestCount" type="number" min="1" max="10000" required>
+              <mat-error *ngIf="form.controls.guestCount.invalid">Enter a valid guest count</mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>Special Requirements (optional)</mat-label>
+            <textarea matInput formControlName="notes" rows="3"></textarea>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit"
+                  class="btn-luxury submit"
+                  [disabled]="!canBook() || form.invalid">
+            <mat-spinner *ngIf="submitting()" diameter="20" class="inline-spin"></mat-spinner>
+            <ng-container *ngIf="!submitting()">
+              <mat-icon>event_available</mat-icon> Submit Booking Request
+            </ng-container>
+          </button>
+
+          <p class="note">
+            <mat-icon>info</mat-icon>
+            Only one booking is permitted per date. Your request will be reviewed and confirmed by our team.
+          </p>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</section>

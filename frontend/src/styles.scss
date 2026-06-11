@@ -1,0 +1,166 @@
+/* ===========================================================
+   Laxmi Palace Lawn — Luxury Wedding Theme (Gold + Maroon)
+   =========================================================== */
+
+:root {
+  --color-maroon: #6b1029;
+  --color-maroon-dark: #4a0a1c;
+  --color-gold: #c9a14a;
+  --color-gold-light: #e7c98a;
+  --color-cream: #fdfaf3;
+  --color-ink: #2b1416;
+  --color-muted: #6e6157;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+
+  --shadow-elev: 0 8px 24px rgba(74, 10, 28, 0.12);
+  --shadow-elev-lg: 0 16px 48px rgba(74, 10, 28, 0.2);
+
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--color-maroon-dark);
+  margin: 0 0 0.6em;
+  line-height: 1.2;
+}
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); }
+h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); }
+h3 { font-size: 1.3rem; }
+
+a { color: var(--color-maroon); text-decoration: none; transition: color .2s; }
+a:hover { color: var(--color-gold); }
+
+img { max-width: 100%; display: block; }
+
+/* Layout helpers */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+.section {
+  padding: 4rem 0;
+}
+.section--accent {
+  background: linear-gradient(180deg, #fff8ea 0%, var(--color-cream) 100%);
+}
+.section-title {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+.section-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 3px;
+  margin: 1rem auto 0;
+  background: linear-gradient(90deg, var(--color-gold), var(--color-maroon));
+  border-radius: 2px;
+}
+
+/* Buttons */
+.btn-luxury {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .85rem 1.75rem;
+  background: linear-gradient(135deg, var(--color-gold), #a87f33);
+  color: #fff !important;
+  font-weight: 600;
+  letter-spacing: .5px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: var(--shadow-elev);
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-luxury:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elev-lg);
+  color: #fff !important;
+}
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .8rem 1.6rem;
+  background: transparent;
+  color: var(--color-maroon) !important;
+  border: 2px solid var(--color-maroon);
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-outline:hover {
+  background: var(--color-maroon);
+  color: #fff !important;
+}
+
+/* Cards */
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-elev);
+  padding: 1.5rem;
+  transition: transform .25s, box-shadow .25s;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-elev-lg);
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp .8s ease both; }
+
+/* Calendar colour overrides for booking calendar */
+.cal-available .mat-calendar-body-cell-content {
+  background-color: rgba(46, 125, 50, 0.15) !important;
+  color: #2e7d32 !important;
+  border-radius: 50%;
+}
+.cal-booked .mat-calendar-body-cell-content {
+  background-color: rgba(198, 40, 40, 0.25) !important;
+  color: #c62828 !important;
+  border-radius: 50%;
+  font-weight: 600;
+}
+.cal-blocked .mat-calendar-body-cell-content {
+  background-color: rgba(97, 97, 97, 0.25) !important;
+  color: #424242 !important;
+  border-radius: 50%;
+  text-decoration: line-through;
+}
+
+/* Material customization */
+.mat-mdc-button,
+.mat-mdc-raised-button {
+  font-family: var(--font-body) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .section { padding: 2.5rem 0; }
+  .container { padding: 0 1rem; }
+}

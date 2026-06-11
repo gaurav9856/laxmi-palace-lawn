@@ -1,0 +1,139 @@
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="container hero-content fade-up">
+    <small class="eyebrow">Welcome to</small>
+    <h1>Laxmi Palace Lawn, Chakia</h1>
+    <p class="lead">Where dreams meet elegance. The most luxurious wedding & event venue in Chakia.</p>
+    <div class="hero-actions">
+      <a routerLink="/booking" class="btn-luxury">
+        <mat-icon>event_available</mat-icon> Book Your Date
+      </a>
+      <a routerLink="/gallery" class="btn-outline" style="color:#fff !important; border-color:#fff;">
+        <mat-icon>photo_library</mat-icon> View Gallery
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="fade-up">
+        <small class="eyebrow">About Us</small>
+        <h2>An Iconic Wedding Destination</h2>
+        <p>
+          Laxmi Palace Lawn is Chakia's most sought-after destination for grand weddings, receptions and
+          special events. Spread across acres of lush green lawn, our venue blends timeless royal aesthetics
+          with modern comforts to deliver an unforgettable experience.
+        </p>
+        <p>
+          From intimate ceremonies to lavish celebrations of over a thousand guests, every detail at
+          Laxmi Palace is curated to perfection. Our dedicated event team works closely with you to
+          ensure your big day is exactly as you've imagined.
+        </p>
+        <ul class="feature-list">
+          <li><mat-icon>verified</mat-icon> 15+ years of trusted hospitality</li>
+          <li><mat-icon>local_parking</mat-icon> Spacious parking for 200+ vehicles</li>
+          <li><mat-icon>restaurant</mat-icon> In-house catering & customised menus</li>
+          <li><mat-icon>lightbulb</mat-icon> Theme decoration & professional lighting</li>
+        </ul>
+        <a routerLink="/about" class="btn-outline">Learn More <mat-icon>arrow_forward</mat-icon></a>
+      </div>
+      <div class="about-image fade-up">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=900"
+             alt="Wedding lawn decoration at Laxmi Palace" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section section--accent">
+  <div class="container">
+    <div class="section-title">
+      <small class="eyebrow">What We Offer</small>
+      <h2>Our Services</h2>
+    </div>
+    <div class="services-grid">
+      <div *ngFor="let s of services" class="card service-card">
+        <div class="service-icon"><mat-icon>{{ s.icon }}</mat-icon></div>
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.description }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY PREVIEW -->
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <small class="eyebrow">Glimpses</small>
+      <h2>Gallery Preview</h2>
+    </div>
+    <div class="gallery-preview">
+      <div *ngFor="let img of galleryPreview" class="gallery-tile">
+        <img [src]="img" alt="Event photo" loading="lazy">
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:2rem;">
+      <a routerLink="/gallery" class="btn-luxury"><mat-icon>collections</mat-icon> View Full Gallery</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section section--accent">
+  <div class="container">
+    <div class="section-title">
+      <small class="eyebrow">Words From Our Couples</small>
+      <h2>Testimonials</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div *ngFor="let t of testimonials" class="card testimonial">
+        <div class="rating">
+          <mat-icon *ngFor="let _ of [].constructor(t.rating)">star</mat-icon>
+        </div>
+        <p class="quote">"{{ t.message }}"</p>
+        <div class="author">
+          <strong>{{ t.name }}</strong>
+          <small>{{ t.event }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT + MAP -->
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <small class="eyebrow">Get in Touch</small>
+      <h2>Contact & Location</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info card">
+        <h3>Reach Out</h3>
+        <div class="info-item"><mat-icon>place</mat-icon>
+          <div><strong>Address</strong><br>Main Road, Chakia, Uttar Pradesh, India</div></div>
+        <div class="info-item"><mat-icon>call</mat-icon>
+          <div><strong>Phone</strong><br>+91 98765 43210 / +91 91234 56789</div></div>
+        <div class="info-item"><mat-icon>email</mat-icon>
+          <div><strong>Email</strong><br>info&#64;laxmipalace.in</div></div>
+        <div class="info-item"><mat-icon>schedule</mat-icon>
+          <div><strong>Hours</strong><br>Open every day · 9 AM – 9 PM</div></div>
+        <a routerLink="/booking" class="btn-luxury" style="margin-top:1rem;">
+          <mat-icon>event_available</mat-icon> Book Now
+        </a>
+      </div>
+      <div class="map-wrap card">
+        <iframe [src]="mapUrl" width="100%" height="100%" style="border:0;"
+                allowfullscreen loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Laxmi Palace Lawn Location"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
