@@ -46,7 +46,9 @@ export class FloatingContactComponent {
     'Hello, I would like to book Laxmi Palace Lawn for an event.'
   );
 
-  open = signal(true); // open by default on desktop, mobile starts collapsed
+  // Default closed — the toggle button is the only thing visible on mobile.
+  // On desktop the CSS keeps both buttons visible regardless.
+  open = signal(false);
 
   get telUrl() { return `tel:+${this.phoneDigits}`; }
   get whatsappUrl() { return `https://wa.me/${this.phoneDigits}?text=${this.whatsappMessage}`; }

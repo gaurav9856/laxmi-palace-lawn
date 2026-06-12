@@ -1,24 +1,47 @@
-<header class="site-header">
+<header class="site-header" [class.has-open-menu]="menuOpen">
   <div class="container header-inner">
     <a routerLink="/" class="brand" (click)="close()">
       <span class="brand-mark">L</span>
       <span class="brand-text">
         <strong>Laxmi Palace</strong>
-        <small>Lawn · Chakia</small>
+        <small>Chakia</small>
       </span>
     </a>
 
-    <button class="hamburger" aria-label="Toggle menu" (click)="toggle()">
+    <!-- Desktop nav (hidden on mobile) -->
+    <nav class="nav-desktop">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
+      <a routerLink="/about" routerLinkActive="active">About</a>
+      <a routerLink="/gallery" routerLinkActive="active">Gallery</a>
+      <a routerLink="/booking" routerLinkActive="active">Booking</a>
+      <a routerLink="/booking" class="btn-luxury cta">
+        <mat-icon>celebration</mat-icon> Book Now
+      </a>
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <button class="hamburger"
+            aria-label="Toggle menu"
+            [attr.aria-expanded]="menuOpen"
+            (click)="toggle()">
       <mat-icon>{{ menuOpen ? 'close' : 'menu' }}</mat-icon>
     </button>
+  </div>
 
-    <nav class="nav" [class.open]="menuOpen">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="close()">Home</a>
-      <a routerLink="/about" routerLinkActive="active" (click)="close()">About</a>
-      <a routerLink="/gallery" routerLinkActive="active" (click)="close()">Gallery</a>
-      <a routerLink="/booking" routerLinkActive="active" (click)="close()">Booking</a>
-      <a routerLink="/booking" class="btn-luxury cta" (click)="close()">
-        <mat-icon>celebration</mat-icon> Book Now
+  <!-- Mobile slide-out menu (separate from header-inner so it covers cleanly) -->
+  <div class="mobile-menu" [class.open]="menuOpen" (click)="close()">
+    <nav class="mobile-menu-inner" (click)="$event.stopPropagation()">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="close()">
+        <mat-icon>home</mat-icon> Home
+      </a>
+      <a routerLink="/about" routerLinkActive="active" (click)="close()">
+        <mat-icon>info</mat-icon> About
+      </a>
+      <a routerLink="/gallery" routerLinkActive="active" (click)="close()">
+        <mat-icon>photo_library</mat-icon> Gallery
+      </a>
+      <a routerLink="/booking" routerLinkActive="active" (click)="close()">
+        <mat-icon>event_available</mat-icon> Booking
       </a>
     </nav>
   </div>

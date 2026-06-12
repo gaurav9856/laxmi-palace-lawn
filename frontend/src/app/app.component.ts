@@ -25,15 +25,19 @@ import { filter } from 'rxjs/operators';
     <app-mobile-book-cta *ngIf="showMobileCta" />
   `,
   styles: [`
-    main { min-height: calc(100vh - 80px); }
+    main { min-height: calc(100vh - 64px); }
+    /* Push content below fixed header */
     main.with-shell { padding-top: 80px; }
-    /* When mobile CTA is visible, add bottom padding so footer/content isn't hidden behind the bar */
-    @media (max-width: 720px) {
-      main.with-mobile-cta { padding-bottom: 88px; }
+    @media (max-width: 880px) {
+      main.with-shell { padding-top: 64px; }
     }
-    /* Push floating contact above the sticky CTA bar */
+    /* Add bottom padding when sticky mobile CTA is visible */
     @media (max-width: 720px) {
-      :host ::ng-deep .lifted .fab-wrap { bottom: calc(88px + env(safe-area-inset-bottom)) !important; }
+      main.with-mobile-cta { padding-bottom: 80px; }
+    }
+    /* Lift floating contact above the sticky bottom CTA */
+    @media (max-width: 720px) {
+      :host ::ng-deep .lifted .fab-wrap { bottom: 80px !important; }
     }
   `]
 })
@@ -46,7 +50,6 @@ export class AppComponent {
       .subscribe((e) => {
         const url = (e as NavigationEnd).urlAfterRedirects;
         this.showShell = !url.startsWith('/admin');
-        // Hide CTA on the booking page itself + on admin
         this.showMobileCta = this.showShell && !url.startsWith('/booking');
       });
   }

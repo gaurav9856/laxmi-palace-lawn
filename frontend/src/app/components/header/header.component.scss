@@ -2,92 +2,179 @@
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(8px);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  height: 80px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  height: 64px;
 }
 .header-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 100%;
+  gap: .5rem;
 }
+
+/* ============= BRAND ============= */
 .brand {
   display: flex;
   align-items: center;
-  gap: .75rem;
+  gap: .65rem;
   color: var(--color-maroon-dark) !important;
+  text-decoration: none;
+  flex: 0 1 auto;
+  min-width: 0; /* allow truncation */
 }
 .brand-mark {
-  width: 44px; height: 44px;
-  display: grid; place-items: center;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
   font-family: var(--font-display);
-  font-size: 1.5rem; font-weight: 700;
+  font-size: 1.35rem;
+  font-weight: 700;
   color: #fff;
   background: linear-gradient(135deg, var(--color-gold), var(--color-maroon));
   border-radius: 50%;
-  box-shadow: 0 4px 10px rgba(107, 16, 41, .3);
+  box-shadow: 0 3px 8px rgba(107, 16, 41, .3);
+  flex-shrink: 0;
+}
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
 }
 .brand-text strong {
-  display: block;
   font-family: var(--font-display);
-  font-size: 1.15rem;
-  line-height: 1;
+  font-size: 1.1rem;
+  line-height: 1.1;
+  color: var(--color-maroon-dark);
+  white-space: nowrap;
 }
 .brand-text small {
-  font-size: .75rem;
+  font-size: .68rem;
   color: var(--color-gold);
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  line-height: 1.4;
+  text-transform: uppercase;
 }
-.nav {
+
+/* ============= DESKTOP NAV ============= */
+.nav-desktop {
   display: flex;
   align-items: center;
-  gap: 1.75rem;
+  gap: 1.5rem;
 }
-.nav a {
+.nav-desktop a {
   font-weight: 500;
   color: var(--color-ink);
+  text-decoration: none;
   position: relative;
   padding: .25rem 0;
 }
-.nav a.active,
-.nav a:hover {
+.nav-desktop a.active,
+.nav-desktop a:hover {
   color: var(--color-maroon);
 }
-.nav a.active::after {
+.nav-desktop a.active::after {
   content: '';
   position: absolute;
-  left: 0; right: 0; bottom: -6px;
+  left: 0; right: 0;
+  bottom: -6px;
   height: 2px;
   background: var(--color-gold);
 }
-.cta { color: #fff !important; }
-
-.hamburger {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-maroon);
+.nav-desktop .cta {
+  color: #fff !important;
+  padding: .55rem 1.2rem;
 }
 
+/* ============= HAMBURGER ============= */
+.hamburger {
+  display: none;
+  background: var(--color-maroon);
+  color: #fff;
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(107, 16, 41, .25);
+  transition: background .2s;
+}
+.hamburger:hover,
+.hamburger:focus-visible { background: var(--color-maroon-dark); }
+.hamburger mat-icon {
+  font-size: 26px;
+  width: 26px;
+  height: 26px;
+}
+
+/* ============= MOBILE SLIDE-OUT MENU ============= */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  inset: 64px 0 0 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+.mobile-menu.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.mobile-menu-inner {
+  background: #fff;
+  padding: 1rem 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .15);
+  transform: translateY(-100%);
+  transition: transform .25s ease;
+}
+.mobile-menu.open .mobile-menu-inner {
+  transform: translateY(0);
+}
+.mobile-menu-inner a {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  padding: 1rem 1.5rem;
+  color: var(--color-ink);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.05rem;
+  border-bottom: 1px solid rgba(0, 0, 0, .05);
+  transition: background .15s;
+}
+.mobile-menu-inner a:last-child { border-bottom: none; }
+.mobile-menu-inner a mat-icon {
+  color: var(--color-gold);
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+}
+.mobile-menu-inner a.active {
+  background: rgba(201, 161, 74, .12);
+  color: var(--color-maroon);
+}
+.mobile-menu-inner a:active {
+  background: rgba(201, 161, 74, .2);
+}
+
+/* ============= RESPONSIVE BREAKPOINT ============= */
 @media (max-width: 880px) {
+  .nav-desktop { display: none; }
   .hamburger { display: inline-flex; }
-  .nav {
-    position: absolute;
-    top: 80px; left: 0; right: 0;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    background: #fff;
-    box-shadow: 0 8px 20px rgba(0,0,0,.1);
-    transform: translateY(-110%);
-    transition: transform .25s ease;
-    padding: 1rem;
-  }
-  .nav.open { transform: translateY(0); }
-  .nav a { padding: 1rem; border-bottom: 1px solid rgba(0,0,0,.06); }
-  .nav a.active::after { display: none; }
-  .cta { margin-top: .5rem; justify-content: center; }
+  .mobile-menu { display: block; }
+}
+
+@media (max-width: 380px) {
+  .brand-text strong { font-size: 1rem; }
+  .brand-text small { font-size: .62rem; letter-spacing: 1.5px; }
+  .brand-mark { width: 36px; height: 36px; font-size: 1.2rem; }
 }

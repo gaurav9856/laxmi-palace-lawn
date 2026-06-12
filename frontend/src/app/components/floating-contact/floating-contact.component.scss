@@ -1,13 +1,13 @@
 .fab-wrap {
   position: fixed;
-  right: 1.25rem;
-  bottom: 1.25rem;
+  right: 1rem;
+  bottom: 1rem;
   z-index: 90;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: .75rem;
-  pointer-events: none; /* let children handle clicks */
+  gap: .5rem;
+  pointer-events: none;
 }
 
 .fab {
@@ -20,18 +20,18 @@
   color: #fff !important;
   text-decoration: none;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
   transition: transform .2s, box-shadow .2s, background .2s;
-  height: 56px;
-  min-width: 56px;
-  padding: 0 1rem;
+  height: 50px;
+  min-width: 50px;
+  padding: 0 1.1rem;
   font-weight: 600;
-  font-size: .95rem;
+  font-size: .9rem;
   white-space: nowrap;
 }
 .fab:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
 }
 .fab:active { transform: translateY(0); }
 
@@ -44,11 +44,18 @@
   background: linear-gradient(135deg, #c9a14a, #6b1029);
 }
 
+/* Toggle is mobile-only; on desktop both contact buttons are always visible. */
 .fab-toggle {
-  display: none; /* hidden on desktop */
+  display: none;
   background: var(--color-maroon);
-  width: 56px;
+  width: 50px;
   padding: 0;
+  position: relative;
+}
+
+/* Desktop: always show both buttons, never the toggle */
+@media (min-width: 721px) {
+  .fab-wa, .fab-call { opacity: 1 !important; transform: none !important; pointer-events: auto !important; }
 }
 .fab-toggle:hover { background: var(--color-maroon-dark); }
 
@@ -56,54 +63,68 @@
 .fab svg, .fab mat-icon {
   flex-shrink: 0;
 }
+.fab mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+}
 
-/* MOBILE: collapse to icon-only with toggle */
+/* MOBILE: smaller buttons + collapsed by default */
 @media (max-width: 720px) {
+  .fab-wrap {
+    right: .75rem;
+    bottom: .75rem;
+    gap: .4rem;
+  }
   .fab-toggle { display: inline-flex; }
 
   .fab .label { display: none; }
   .fab {
-    height: 52px;
-    min-width: 52px;
+    height: 44px;
+    min-width: 44px;
+    width: 44px;
     padding: 0;
-    width: 52px;
+    font-size: .85rem;
+  }
+  .fab mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+  .fab-wa svg {
+    width: 22px !important;
+    height: 22px !important;
   }
 
-  /* Collapsed state on mobile: only the toggle is visible */
+  /* Collapsed: only toggle visible */
   .fab-wrap:not(.open) .fab-wa,
   .fab-wrap:not(.open) .fab-call {
     opacity: 0;
-    transform: translateY(20px) scale(.6);
+    transform: translateY(20px) scale(.5);
     pointer-events: none;
   }
   .fab-wa, .fab-call {
-    transition: opacity .25s ease, transform .25s ease;
+    transition: opacity .2s ease, transform .2s ease;
   }
-
-  /* Open state on mobile */
   .fab-wrap.open .fab-wa,
   .fab-wrap.open .fab-call {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-}
 
-/* Subtle attention pulse on the toggle */
-@media (max-width: 720px) {
+  /* Subtle attention pulse */
   .fab-wrap:not(.open) .fab-toggle::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: 999px;
-    box-shadow: 0 0 0 0 rgba(107, 16, 41, .6);
+    box-shadow: 0 0 0 0 rgba(107, 16, 41, .5);
     animation: pulse 2s infinite;
   }
-  .fab-toggle { position: relative; }
-}
-@keyframes pulse {
-  0%   { box-shadow: 0 0 0 0   rgba(107, 16, 41, .6); }
-  70%  { box-shadow: 0 0 0 14px rgba(107, 16, 41, 0); }
-  100% { box-shadow: 0 0 0 0   rgba(107, 16, 41, 0); }
 }
 
-/* Hide on admin pages — handled by parent component */
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0   rgba(107, 16, 41, .5); }
+  70%  { box-shadow: 0 0 0 12px rgba(107, 16, 41, 0); }
+  100% { box-shadow: 0 0 0 0   rgba(107, 16, 41, 0); }
+}
