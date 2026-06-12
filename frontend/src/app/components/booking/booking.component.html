@@ -50,20 +50,32 @@
         <form [formGroup]="form" (ngSubmit)="submit()">
           <mat-form-field appearance="outline" class="full">
             <mat-label>Full Name</mat-label>
-            <input matInput formControlName="name" autocomplete="name" required>
+            <input matInput formControlName="name" autocomplete="name" autocapitalize="words" required>
+            <mat-icon matSuffix>person</mat-icon>
             <mat-error *ngIf="form.controls.name.invalid">Please enter your full name</mat-error>
           </mat-form-field>
 
           <div class="row">
             <mat-form-field appearance="outline">
               <mat-label>Mobile Number</mat-label>
-              <input matInput formControlName="mobile" inputmode="tel" maxlength="10" required>
+              <input matInput formControlName="mobile"
+                     type="tel"
+                     inputmode="numeric"
+                     pattern="[0-9]*"
+                     maxlength="10"
+                     autocomplete="tel"
+                     required>
+              <mat-icon matSuffix>phone</mat-icon>
               <mat-error *ngIf="form.controls.mobile.invalid">Enter a valid 10-digit mobile</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Email (optional)</mat-label>
-              <input matInput formControlName="email" type="email" autocomplete="email">
+              <input matInput formControlName="email"
+                     type="email"
+                     inputmode="email"
+                     autocomplete="email">
+              <mat-icon matSuffix>mail</mat-icon>
               <mat-error *ngIf="form.controls.email.invalid">Enter a valid email</mat-error>
             </mat-form-field>
           </div>
@@ -79,7 +91,13 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Number of Guests</mat-label>
-              <input matInput formControlName="guestCount" type="number" min="1" max="10000" required>
+              <input matInput formControlName="guestCount"
+                     type="number"
+                     inputmode="numeric"
+                     min="1"
+                     max="10000"
+                     required>
+              <mat-icon matSuffix>groups</mat-icon>
               <mat-error *ngIf="form.controls.guestCount.invalid">Enter a valid guest count</mat-error>
             </mat-form-field>
           </div>

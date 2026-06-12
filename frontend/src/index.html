@@ -4,17 +4,51 @@
   <meta charset="utf-8">
   <title>Laxmi Palace Lawn, Chakia | Luxury Wedding & Event Venue</title>
   <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Laxmi Palace Lawn, Chakia - A premier wedding and event venue offering luxurious facilities, spacious lawn, ample parking and elegant ambiance. Book your dream wedding, reception or event today.">
-  <meta name="keywords" content="Laxmi Palace Lawn, Chakia lawn, wedding venue Chakia, marriage lawn, banquet hall, reception venue, event booking">
+
+  <!-- Mobile-first viewport -->
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+
+  <!-- SEO -->
+  <meta name="description"
+        content="Laxmi Palace Lawn, Chakia - A premier wedding and event venue offering luxurious facilities, spacious lawn, ample parking and elegant ambiance. Check availability and book online from your phone.">
+  <meta name="keywords"
+        content="Laxmi Palace Lawn, Chakia lawn, wedding venue Chakia, marriage lawn, banquet hall, reception venue, online booking, date availability">
   <meta name="author" content="Laxmi Palace Lawn">
   <meta property="og:title" content="Laxmi Palace Lawn, Chakia">
-  <meta property="og:description" content="Luxury wedding & event venue in Chakia. Book now.">
+  <meta property="og:description" content="Luxury wedding & event venue in Chakia. Book online from your phone.">
   <meta property="og:type" content="website">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&family=Material+Icons&display=swap" rel="stylesheet">
+
+  <!-- PWA: installable to home screen -->
+  <link rel="manifest" href="assets/manifest.webmanifest">
+  <meta name="theme-color" content="#6b1029">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Laxmi Palace">
+  <link rel="apple-touch-icon" href="assets/icon-192.svg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&family=Material+Icons&display=swap"
+        rel="stylesheet">
 </head>
 <body class="mat-typography">
-  <app-root></app-root>
+  <app-root>
+    <!-- Loading splash shown until Angular boots -->
+    <div style="
+        position:fixed;inset:0;display:grid;place-items:center;
+        background:linear-gradient(135deg,#6b1029,#4a0a1c);color:#fde4a8;
+        font-family:Georgia,serif;text-align:center;">
+      <div>
+        <div style="font-size:3rem;font-weight:700">Laxmi Palace</div>
+        <div style="letter-spacing:4px;font-size:.75rem;color:#c9a14a;margin-top:.5rem">CHAKIA</div>
+      </div>
+    </div>
+  </app-root>
 </body>
 </html>

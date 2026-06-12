@@ -1,10 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
+import { BookingService } from '../../services/booking.service';
 
 interface Service {
   icon: string;
@@ -21,11 +28,28 @@ interface Testimonial {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatIconModule, MatButtonModule],
+  imports: [
+    CommonModule, FormsModule, RouterLink,
+    MatIconModule, MatButtonModule,
+    MatFormFieldModule, MatInputModule,
+    MatDatepickerModule, MatNativeDateModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
+  private bookingApi = inject(BookingService);
+  private router = inject(Router);
+
+  // Quick-check widget state
+  quickDate = signal<Date | null>(null);
+  checking = signal(false);
+  result = signal<{ checked: boolean; available: boolean; message: string }>({
+    checked: false, available: false, message: ''
+  });
+  minDate = new Date();
+
   mapUrl: SafeResourceUrl;
 
   services: Service[] = [
@@ -63,5 +87,47 @@ export class HomeComponent {
 
   constructor(sanitizer: DomSanitizer) {
     this.mapUrl = sanitizer.bypassSecurityTrustResourceUrl(environment.mapsEmbedUrl);
+  }
+
+  checkAvailability() {
+    const d = this.quickDate();
+    if (!d) return;
+    const iso = this.toIso(d);
+    this.checking.set(true);
+    this.result.set({ checked: false, available: false, message: '' });
+    this.bookingApi.checkAvailability(iso).subscribe({
+      next: res => {
+        this.checking.set(false);
+        this.result.set({
+          checked: true,
+          available: res.available,
+          message: res.message || (res.available ? 'Date is available! Tap below to book.' : 'Date is not available.')
+        });
+      },
+      error: () => {
+        this.checking.set(false);
+        this.result.set({
+          checked: true,
+          available: false,
+          message: 'Could not check availability. Try again or call us.'
+        });
+      }
+    });
+  }
+
+  goToBooking() {
+    const d = this.quickDate();
+    if (d) {
+      this.router.navigate(['/booking'], { queryParams: { date: this.toIso(d) } });
+    } else {
+      this.router.navigate(['/booking']);
+    }
+  }
+
+  private toIso(d: Date): string {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
   }
 }

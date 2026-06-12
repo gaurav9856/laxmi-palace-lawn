@@ -16,6 +16,58 @@
   </div>
 </section>
 
+<!-- QUICK AVAILABILITY CHECK (mobile-first booking widget) -->
+<section class="quick-check">
+  <div class="container">
+    <div class="quick-card">
+      <div class="quick-head">
+        <mat-icon>event_available</mat-icon>
+        <div>
+          <h2>Check Date Availability</h2>
+          <p>Pick your event date — see instantly if the lawn is free.</p>
+        </div>
+      </div>
+
+      <div class="quick-form">
+        <mat-form-field appearance="outline" class="date-field">
+          <mat-label>Event date</mat-label>
+          <input matInput
+                 [matDatepicker]="picker"
+                 [min]="minDate"
+                 [ngModel]="quickDate()"
+                 (ngModelChange)="quickDate.set($event); result.set({checked:false,available:false,message:''})"
+                 readonly
+                 (click)="picker.open()">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker touchUi></mat-datepicker>
+        </mat-form-field>
+
+        <button class="check-btn"
+                (click)="checkAvailability()"
+                [disabled]="!quickDate() || checking()">
+          <mat-spinner *ngIf="checking()" diameter="20" class="spin"></mat-spinner>
+          <ng-container *ngIf="!checking()">
+            <mat-icon>search</mat-icon> Check Now
+          </ng-container>
+        </button>
+      </div>
+
+      <div *ngIf="result().checked" class="quick-result"
+           [class.ok]="result().available"
+           [class.bad]="!result().available">
+        <mat-icon>{{ result().available ? 'check_circle' : 'cancel' }}</mat-icon>
+        <div class="msg">{{ result().available ? '✅' : '❌' }} {{ result().message }}</div>
+        <button class="proceed" (click)="goToBooking()" *ngIf="result().available">
+          Continue to Book <mat-icon>arrow_forward</mat-icon>
+        </button>
+        <button class="proceed alt" (click)="quickDate.set(null); result.set({checked:false,available:false,message:''})" *ngIf="!result().available">
+          Try Another Date
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ABOUT -->
 <section class="section">
   <div class="container">

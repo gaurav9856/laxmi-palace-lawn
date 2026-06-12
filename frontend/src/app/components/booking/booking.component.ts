@@ -1,5 +1,6 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -31,6 +32,7 @@ export class BookingComponent implements OnInit {
   private bookingApi = inject(BookingService);
   private calendarApi = inject(CalendarService);
   private snack = inject(MatSnackBar);
+  private route = inject(ActivatedRoute);
 
   bookedDates = signal<Set<string>>(new Set());
   blockedDates = signal<Set<string>>(new Set());
@@ -61,7 +63,18 @@ export class BookingComponent implements OnInit {
     !this.submitting()
   );
 
-  ngOnInit(): void { this.loadCalendar(); }
+  ngOnInit(): void {
+    this.loadCalendar();
+    // Pre-select date from ?date=YYYY-MM-DD query param (set by quick-check on Home)
+    const qDate = this.route.snapshot.queryParamMap.get('date');
+    if (qDate && /^\d{4}-\d{2}-\d{2}$/.test(qDate)) {
+      const [y, m, d] = qDate.split('-').map(Number);
+      const date = new Date(y, m - 1, d);
+      if (date >= this.startOfToday()) {
+        this.onDateSelected(date);
+      }
+    }
+  }
 
   loadCalendar() {
     this.loadingCal.set(true);
