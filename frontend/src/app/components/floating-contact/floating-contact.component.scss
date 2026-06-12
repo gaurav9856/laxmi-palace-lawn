@@ -1,0 +1,109 @@
+.fab-wrap {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .75rem;
+  pointer-events: none; /* let children handle clicks */
+}
+
+.fab {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  color: #fff !important;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  transition: transform .2s, box-shadow .2s, background .2s;
+  height: 56px;
+  min-width: 56px;
+  padding: 0 1rem;
+  font-weight: 600;
+  font-size: .95rem;
+  white-space: nowrap;
+}
+.fab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+}
+.fab:active { transform: translateY(0); }
+
+.fab-wa {
+  background: #25d366;
+}
+.fab-wa:hover { background: #1ebd5b; }
+
+.fab-call {
+  background: linear-gradient(135deg, #c9a14a, #6b1029);
+}
+
+.fab-toggle {
+  display: none; /* hidden on desktop */
+  background: var(--color-maroon);
+  width: 56px;
+  padding: 0;
+}
+.fab-toggle:hover { background: var(--color-maroon-dark); }
+
+.fab .label { margin-left: .5rem; }
+.fab svg, .fab mat-icon {
+  flex-shrink: 0;
+}
+
+/* MOBILE: collapse to icon-only with toggle */
+@media (max-width: 720px) {
+  .fab-toggle { display: inline-flex; }
+
+  .fab .label { display: none; }
+  .fab {
+    height: 52px;
+    min-width: 52px;
+    padding: 0;
+    width: 52px;
+  }
+
+  /* Collapsed state on mobile: only the toggle is visible */
+  .fab-wrap:not(.open) .fab-wa,
+  .fab-wrap:not(.open) .fab-call {
+    opacity: 0;
+    transform: translateY(20px) scale(.6);
+    pointer-events: none;
+  }
+  .fab-wa, .fab-call {
+    transition: opacity .25s ease, transform .25s ease;
+  }
+
+  /* Open state on mobile */
+  .fab-wrap.open .fab-wa,
+  .fab-wrap.open .fab-call {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Subtle attention pulse on the toggle */
+@media (max-width: 720px) {
+  .fab-wrap:not(.open) .fab-toggle::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    box-shadow: 0 0 0 0 rgba(107, 16, 41, .6);
+    animation: pulse 2s infinite;
+  }
+  .fab-toggle { position: relative; }
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0   rgba(107, 16, 41, .6); }
+  70%  { box-shadow: 0 0 0 14px rgba(107, 16, 41, 0); }
+  100% { box-shadow: 0 0 0 0   rgba(107, 16, 41, 0); }
+}
+
+/* Hide on admin pages — handled by parent component */
